@@ -33,6 +33,10 @@ Desligar o portal não perde nada.
 
 ## Instalação
 
+> **Primeira vez? Vá pelo [passo a passo](Docs/INSTALACAO.md).** É o mesmo conteúdo em
+> ordem linear, com uma conferência ao fim de cada etapa para você saber se pode seguir.
+> O que vem abaixo é referência.
+
 ### 1. No GLPI (uma vez, como admin)
 
 **Cliente OAuth** — Configurar → Clientes OAuth → Adicionar
