@@ -1,0 +1,43 @@
+# dependências
+node_modules/
+.venv/
+__pycache__/
+
+# build
+/.next
+/out
+*.tsbuildinfo
+next-env.d.ts
+
+# ambiente — nunca commitar segredos
+.env*
+!.env.example
+
+# configuração gravada pela tela ⚙️ (contém a chave da IA)
+dados/
+config.json
+!tsconfig.json
+
+# chaves e certificados
+*.key
+*.pem
+*.p12
+id_rsa*
+id_ed25519*
+credentials*
+secrets*
+
+# dumps e backups
+*.dump
+*.sql.gz
+*.bak*
+
+# logs
+*.log
+
+# diversos
+.DS_Store
+
+# pacote temporário de deploy
+.deploy-pkg/
+.deploy-pkg.tar.gz

@@ -1,0 +1,28 @@
+{
+  "name": "chamados-ti",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Portal de Chamados TI — front-end amigavel para o GLPI 11",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.115.0",
+    "iron-session": "^8.0.4",
+    "next": "^15.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/web-push": "^3.6.4",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.8.0"
+  }
+}

@@ -1,0 +1,14 @@
+[Unit]
+Description=Portal de Chamados TI (GLPI)
+After=network.target
+
+[Service]
+User=chamados
+WorkingDirectory=/opt/chamados-ti
+EnvironmentFile=/opt/chamados-ti/.env
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

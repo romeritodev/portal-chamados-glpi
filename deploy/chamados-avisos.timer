@@ -1,0 +1,11 @@
+[Unit]
+Description=Dispara a verificação de avisos a cada minuto
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=1min
+AccuracySec=10s
+Unit=chamados-avisos.service
+
+[Install]
+WantedBy=timers.target

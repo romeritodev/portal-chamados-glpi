@@ -1,0 +1,11 @@
+[Unit]
+Description=Verifica chamados e envia avisos no celular
+After=chamados-ti.service
+Requires=chamados-ti.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=/opt/chamados-ti/.env
+ExecStart=/usr/bin/curl -sS -m 45 -o /dev/null -w "avisos: HTTP %{http_code} em %{time_total}s\n" \
+  -X POST http://127.0.0.1:3000/api/push/verificar \
+  -H "x-portal-token: ${PORTAL_CRON_TOKEN}"
