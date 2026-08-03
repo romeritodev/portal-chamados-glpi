@@ -11,6 +11,7 @@
  */
 
 import "server-only";
+import { NOTAS_CSAT } from "./copy";
 
 // ---------------------------------------------------------------------------
 // Configuração
@@ -116,7 +117,11 @@ function normalizeTicket(raw: Record<string, unknown>): GlpiTicket | null {
     entityId: numericValue(raw.entity),
     entityName: typeof entity?.name === "string" ? entity.name : undefined,
     categoryName: typeof category?.name === "string" ? category.name : undefined,
-    solveDate: typeof raw.solvedate === "string" ? raw.solvedate : undefined,
+    // o campo é date_solve, não solvedate (conferido na instância em
+    // 30/07/2026). Com o nome errado isto era sempre undefined, e o silêncio
+    // custou caro: o rastreador nunca mostrou a data da solução e o mural
+    // dizia "0 resolvidos hoje" mesmo com o dia inteiro de trabalho feito.
+    solveDate: typeof raw.date_solve === "string" ? raw.date_solve : undefined,
     timeToResolve: typeof raw.time_to_resolve === "string" ? raw.time_to_resolve : undefined,
     requesterName,
     requesterId,
@@ -310,6 +315,18 @@ export async function getCurrentUser(
       entityId: typeof entidade?.id === "number" ? entidade.id : undefined,
     };
   } catch (err) {
+    /**
+     * Sessão morta no GLPI é DIFERENTE de falha ao consultar, e engolir as
+     * duas como `null` custou caro: as telas que checam o perfil ao vivo
+     * (painel, relatórios, ⚙️) leem `null` como "não é da equipe" e
+     * respondem 404. A pessoa via "página não encontrada" quando o problema
+     * era só o token vencido.
+     *
+     * Repassando o erro de autenticação, quem chama redireciona para o
+     * login, que é o que a situação pede. Falha de rede continua devolvendo
+     * `null`, porque aí a sessão pode estar boa e derrubar seria pior.
+     */
+    if (err instanceof GlpiAuthError) throw err;
     console.error(
       "Falha ao ler /session:",
       err instanceof Error ? err.message : "erro desconhecido",
@@ -588,9 +605,12 @@ export async function registrarAvaliacao(
 ): Promise<boolean> {
   const token = await getServiceToken();
   if (!token) return false;
-  const emojis = ["😡", "🙁", "😐", "🙂", "😍"];
+  // mesma escala das telas (lib/copy.ts): três listas separadas acabariam
+  // divergindo, e aí o acompanhamento no GLPI diria uma coisa e o relatório
+  // outra sobre a mesma nota
+  const escala = NOTAS_CSAT[nota - 1];
   const linhas = [
-    `<p><b>[avaliacao-portal] nota=${nota}</b> ${emojis[nota - 1] ?? ""} — avaliação do requerente ao aprovar a solução.</p>`,
+    `<p><b>[avaliacao-portal] nota=${nota}</b> ${escala?.rosto ?? ""} ${escala?.nome ?? ""} — avaliação do requerente ao aprovar a solução.</p>`,
   ];
   if (comentario?.trim()) linhas.push(`<p>${comentario.trim()}</p>`);
   try {

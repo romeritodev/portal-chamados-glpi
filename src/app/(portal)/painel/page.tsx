@@ -66,6 +66,13 @@ export default async function PainelPage() {
     <main className="mx-auto max-w-[1400px] px-4 py-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-xl font-bold">Painel de atendimento</h2>
+        <Link
+          href="/mural"
+          target="_blank"
+          className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-gray-300 bg-superficie px-4 py-2 font-medium text-gray-700 hover:bg-gray-50"
+        >
+          📺 Abrir mural
+        </Link>
         {novos > 0 && (
           <Link
             href="/painel/triagem"

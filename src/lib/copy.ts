@@ -62,6 +62,24 @@ export function urgenciaChamado(urgencia?: number): UrgenciaVisual {
   };
 }
 
+/**
+ * Notas de satisfação, de 1 a 5.
+ *
+ * Uma lista só, usada na hora de avaliar E no relatório — se as duas telas
+ * divergirem, o técnico lê "Bom" num gráfico que o usuário respondeu como
+ * outra coisa. O rosto ajuda a escolher rápido; a palavra é que diz o que
+ * significa, e sem ela o gráfico do relatório vira adivinhação.
+ */
+export const NOTAS_CSAT = [
+  { nota: 1, rosto: "😠", nome: "Péssimo" },
+  { nota: 2, rosto: "🙁", nome: "Ruim" },
+  { nota: 3, rosto: "😐", nome: "Regular" },
+  { nota: 4, rosto: "🙂", nome: "Bom" },
+  // 😀 no lugar do coração: "amei" não é resposta de chamado de TI, e a
+  // escala fica coerente — cinco rostos que só variam de bravo a contente
+  { nota: 5, rosto: "😀", nome: "Excelente" },
+] as const;
+
 export function statusChamado(status: number): StatusVisual {
   return (
     STATUS_CHAMADO[status] ?? {

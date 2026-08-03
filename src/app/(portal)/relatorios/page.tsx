@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { lerAvaliacoes, resumoCsat } from "@/lib/avaliacoes";
+import { NOTAS_CSAT } from "@/lib/copy";
 import { getCurrentUser, GlpiAuthError } from "@/lib/glpi";
 import { nomeInstituicao } from "@/lib/instituicao";
 import {
@@ -365,9 +366,14 @@ function Tendencia({ dados }: { dados: { rotulo: string; valor: number }[] }) {
   );
 }
 
-/** Distribuição das notas de satisfação (1 a 5, com o emoji que o usuário viu). */
+/**
+ * Distribuição das notas de satisfação.
+ *
+ * O NOME fica escrito ao lado do rosto, e não só ao passar o mouse: quem
+ * imprime o relatório não passa o mouse em papel, e quem projeta numa reunião
+ * também não. Rosto sozinho obriga a decorar a escala.
+ */
 function Satisfacao({ resumo }: { resumo: { quantidade: number; media: number; distribuicao: number[] } }) {
-  const EMOJIS = ["😡", "🙁", "😐", "🙂", "😍"];
   if (resumo.quantidade === 0) {
     return (
       <p className="py-6 text-center text-sm text-gray-500">
@@ -385,11 +391,13 @@ function Satisfacao({ resumo }: { resumo: { quantidade: number; media: number; d
       <ul className="mt-3 space-y-1.5">
         {[5, 4, 3, 2, 1].map((nota) => {
           const qtd = resumo.distribuicao[nota - 1];
+          const escala = NOTAS_CSAT[nota - 1];
           return (
             <li key={nota} className="flex items-center gap-2">
               <span aria-hidden className="w-6 text-center text-lg">
-                {EMOJIS[nota - 1]}
+                {escala.rosto}
               </span>
+              <span className="w-20 text-sm font-medium text-gray-700">{escala.nome}</span>
               <span className="h-3 flex-1 overflow-hidden rounded-full bg-gray-100">
                 <span
                   className="block h-full rounded-full bg-brand-600"

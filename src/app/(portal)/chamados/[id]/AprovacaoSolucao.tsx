@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "@/components/Toast";
 
-const EMOJIS = ["😡", "🙁", "😐", "🙂", "😍"] as const;
+import { NOTAS_CSAT } from "@/lib/copy";
 
 /**
  * Botões de aprovação da solução (fluxo nativo do GLPI) + CSAT de 1 clique
@@ -82,9 +82,10 @@ export default function AprovacaoSolucao({ ticketId }: { ticketId: number }) {
       <div className="mt-4 rounded-2xl border border-green-200 bg-green-50 p-4 text-center">
         <p className="font-semibold text-green-800">✅ Chamado encerrado — que bom que resolveu!</p>
         <p className="mt-1 text-sm text-sucesso">Como foi o atendimento? (1 toque)</p>
-        <div className="mt-3 flex justify-center gap-2">
-          {EMOJIS.map((emoji, i) => {
-            const nota = i + 1;
+        {/* a palavra vai embaixo do rosto: emoji sozinho cada um interpreta de
+            um jeito, e é essa nota que vira número no relatório */}
+        <div className="mt-3 flex justify-center gap-1">
+          {NOTAS_CSAT.map(({ nota, rosto, nome }) => {
             const sel = notaDada === nota;
             return (
               <button
@@ -92,12 +93,15 @@ export default function AprovacaoSolucao({ ticketId }: { ticketId: number }) {
                 type="button"
                 disabled={notaDada !== null}
                 onClick={() => avaliar(nota)}
-                aria-label={`Nota ${nota} de 5`}
-                className={`grid size-12 place-items-center rounded-xl text-2xl transition hover:scale-110 hover:bg-amber-100 disabled:hover:scale-100 ${
-                  sel ? "scale-110 bg-amber-100" : notaDada !== null ? "opacity-40" : ""
+                aria-label={`${nome} — nota ${nota} de 5`}
+                className={`flex min-h-11 w-16 flex-col items-center gap-0.5 rounded-xl px-1 py-1.5 transition hover:bg-amber-100 ${
+                  sel ? "scale-105 bg-amber-100" : notaDada !== null ? "opacity-40" : ""
                 }`}
               >
-                {emoji}
+                <span aria-hidden className="text-2xl leading-none">
+                  {rosto}
+                </span>
+                <span className="text-[11px] font-medium leading-tight text-gray-700">{nome}</span>
               </button>
             );
           })}
